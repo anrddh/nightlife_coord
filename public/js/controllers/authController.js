@@ -5,18 +5,24 @@ Nightlife.controller("authController", ['$scope', 'auth', '$location', function(
         $location.path('/');
     }
 
+    $scope.error = "";
+
     $scope.register = function() {
         console.log(auth);
         auth.register($scope.user).error(function(err) {
             $scope.error = err;
         });
-        $location.path('/');
+        if(!$scope.error === "") {
+            $location.path('/');
+        }
     };
 
     $scope.logIn = function() {
         auth.logIn($scope.user).error(function(err) {
             $scope.error = err;
         });
-        $location.path('/');
+        if(!$scope.error === "") {
+            $location.path('/');
+        }
     };
 }]);

@@ -1,11 +1,12 @@
 <h1>So, where are you hanging out tonight?</h1>
 <form ng-submit="getBusiness()">
     <input type="text" class="search" ng-model="city" placeholder="Where you at?" required>
-    <button type="submit" class="btn-search">Submit</button>
+    <button type="submit" class="btn btn-primary btn-search">Submit</button>
 </form>
 <div class="white" ng-show="venues">
     <article ng-repeat="venue in venues">
         <h3><a href="{{ venue.url }}">{{ venue.name }}</a></h3>
         <p>{{ venue["snippet_text"] }}</p>
+        <button ng-click="addGoing(venue)" class="btn btn-info">{{ venue.going }} going</button>
     </article>
 </div>

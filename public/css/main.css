@@ -1,4 +1,4 @@
-html {
+html, body {
     background: linear-gradient(
         rgba(0, 0, 0, 0.7),
         rgba(0, 0, 0, 0.7)),
@@ -50,8 +50,8 @@ article {
 }
 
 .btn-search {
-    width: 50%;
-    margin-left: 25%;
+    width: 30%;
+    margin-left: 35%;
     border:none;
     height: 30px;
     position: absolute;
@@ -71,5 +71,25 @@ article {
 
 a, a:visited, a:active, a:hover {
     text-decoration: none;
-    color: #d0d0d0;
+    color: #444;
+}
+
+.auth {
+    position: absolute;
+    top: 175px;
+    width: 90%;
+    margin-left: 5%;
+    text-align: center;
+}
+
+.alert {
+    position: absolute;
+    top: 50px;
+    width: 90%;
+    margin-left: 5%;
+}
+
+form > a, a:visited, a:active, a:hover {
+    color: #efefef;
+    text-decoration: underline;
 }

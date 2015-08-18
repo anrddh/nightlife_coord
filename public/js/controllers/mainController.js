@@ -1,4 +1,4 @@
-Nightlife.controller("mainController", function($scope, $http) {
+Nightlife.controller("mainController", function($scope, $http, auth, $location) {
     function randomString(length, chars) {
         var result = '';
         for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
@@ -28,10 +28,21 @@ Nightlife.controller("mainController", function($scope, $http) {
 
         $http.jsonp(url, {params: params})
             .success(function(venue) {
-                $scope.venues = venue.businesses;
+                $scope.venues = venue.businesses.map(function(item) {
+                    item.going = 0;
+                    return item;
+                });
             })
             .error(function(err) {
                 console.log("Error: " + err);
             });
+    };
+
+    $scope.addGoing = function(venue) {
+        if(auth.isLoggedIn()) {
+            venue.going += 1;
+        } else {
+            $location.path('/login');
+        }
     };
 });

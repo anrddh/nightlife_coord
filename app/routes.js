@@ -12,15 +12,25 @@ module.exports = function(app) {
         });
     });
 
-    app.post('/api/venues/', function(req, res) {
-        Options.findById(req.body["_id"], function(err, venue) {
+    app.post('/api/venues/', auth, function(req, res) {
+        Venues.findById(req.body["_id"], function(err, venue) {
             if(err) res.send(err);
-            venue.going = req.body.going;
-            option.save(function(err) {
-                if(err) res.send(err);
+            if(venue.length) {
+                venue.going = req.body.going;
+                option.save(function(err) {
+                    if(err) res.send(err);
 
-                res.json({message: "Success!"});
-            });
+                    res.json({message: "Success!"});
+                });
+            } else {
+                var venue = new Venues();
+                venue.name = req.body.name;
+                venue.going = req.body.going;
+
+                venue.save(function(err) {
+                    if(err) res.send(err);
+                });
+            }
         });
     });
 
