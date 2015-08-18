@@ -7,7 +7,8 @@ Nightlife.controller("mainController", function($scope, $http) {
 
     $scope.getBusiness = function() {
         var method = 'GET';
-        var url = 'http://api.yelp.com/v2/search';
+        var url    = 'http://api.yelp.com/v2/search';
+
         var params = {
             callback: 'angular.callbacks._0',
             oauth_consumer_key: '4L2iIoI3GZEltc4HHQvgcA',
@@ -18,14 +19,16 @@ Nightlife.controller("mainController", function($scope, $http) {
             location: $scope.city,
             term: 'bar'
         };
+
         var consumerSecret = 'G2cmV4F6pUi_3Pu3bCNp3L1Cobg';
-        var tokenSecret = 'FWtyT7tYHEFr6_agupiwqnMPRXo';
-        var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, {encoded: false});
-        console.log(signature);
+        var tokenSecret    = 'FWtyT7tYHEFr6_agupiwqnMPRXo';
+        var signature      = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, {encoded: false});
+
         params['oauth_signature'] = signature;
+
         $http.jsonp(url, {params: params})
             .success(function(venue) {
-                console.log(venue);
+                $scope.venues = venue.businesses;
             })
             .error(function(err) {
                 console.log("Error: " + err);

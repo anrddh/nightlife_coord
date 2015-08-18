@@ -7,12 +7,12 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    font-family: 'Leckerli One', cursive;
 }
 
 html, body {
     width: 100%;
     height: 100%;
+    font-family: sans-serif;
 }
 
 .main {
@@ -27,6 +27,14 @@ h1 {
     position: relative;
     top: 100px;
     font-size: 2em;
+}
+
+h3 {
+    font-weight: 800;
+}
+
+article {
+    margin: 10px;
 }
 
 .search {
@@ -48,4 +56,20 @@ h1 {
     height: 30px;
     position: absolute;
     bottom: 32%;
+}
+
+.white {
+    position: absolute;
+    top: 75%;
+    left: 0;
+    right: 0;
+    width: 70%;
+    margin: auto;
+    padding: 5%;
+    background-color: #fff;
+}
+
+a, a:visited, a:active, a:hover {
+    text-decoration: none;
+    color: #d0d0d0;
 }
