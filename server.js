@@ -6,7 +6,7 @@ var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var morgan         = require('morgan');
 var passport       = require('passport');
-var port           = process.env.PORT;
+var port           = process.env.PORT || 3030;
 
 mongoose.connect(database.url);
 require('./app/models/user');
@@ -22,5 +22,5 @@ app.use(passport.initialize());
 
 require('./app/routes')(app);
 
-app.listen(port||3030);
+app.listen(port);
 console.log("App listening on port " + port);
