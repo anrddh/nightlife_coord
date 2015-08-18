@@ -1,0 +1,28 @@
+{
+  "name": "nightlife_coord",
+  "version": "0.0.1",
+  "description": "An application to coordinate your nightlife!",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/awesomeaniruddh/nightlife_coord.git"
+  },
+  "author": "Aniruddh Agarwal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/awesomeaniruddh/nightlife_coord/issues"
+  },
+  "homepage": "https://github.com/awesomeaniruddh/nightlife_coord#readme",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "crypto": "0.0.3",
+    "express": "^4.13.3",
+    "express-jwt": "^3.0.1",
+    "jsonwebtoken": "^5.0.4",
+    "method-override": "^2.3.5",
+    "mongoose": "^4.1.3",
+    "morgan": "^1.6.1",
+    "passport": "^0.2.2",
+    "passport-local": "^1.0.0"
+  }
+}
