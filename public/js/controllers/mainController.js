@@ -1,0 +1,3 @@
+Nightlife.controller("mainController", function() {
+
+});
