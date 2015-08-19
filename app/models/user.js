@@ -6,7 +6,8 @@ var jwt      = require('jsonwebtoken');
 var userSchema = new Schema({
     username: { type: String, lowercase: true},
     hash: String,
-    salt: String
+    salt: String,
+    venues: [String]
 });
 
 userSchema.methods.setPassword = function(password){

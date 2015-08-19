@@ -4,11 +4,11 @@ Nightlife.factory('auth', ['$http', '$window', '$location', function($http, $win
     var auth = {};
 
     auth.saveToken = function(token) {
-        $window.localStorage['tok'] = token;
+        $window.localStorage['t'] = token;
     };
 
     auth.getToken = function() {
-        return $window.localStorage['tok'];
+        return $window.localStorage['t'];
     };
 
     auth.isLoggedIn = function() {
@@ -44,7 +44,7 @@ Nightlife.factory('auth', ['$http', '$window', '$location', function($http, $win
     };
 
     auth.logOut = function() {
-        $window.localStorage.removeItem('tok');
+        $window.localStorage.removeItem('t');
         $location.path('/');
     };
 

@@ -3,34 +3,50 @@ var User     = require('./models/user.js').user;
 var passport = require('passport');
 var jwt      = require('express-jwt');
 var auth     = jwt({secret: 'SECRET', userProperty: 'payload'});
+var yelp     = require('yelp').createClient({
+    consumer_key: '4L2iIoI3GZEltc4HHQvgcA',
+    consumer_secret: 'G2cmV4F6pUi_3Pu3bCNp3L1Cobg',
+    token: 'v4nIUB7KbVqPbndC6m4elsCrSQh3dF6s',
+    token_secret: 'FWtyT7tYHEFr6_agupiwqnMPRXo'
+});
 
 module.exports = function(app) {
-    app.get('/api/venues', function(req, res) {
-        Venue.find(function(err, venues) {
+    app.get('/api/yelp/:location', function(req, res) {
+        yelp.search({term: 'bar', location: req.params.location}, function(err, data) {
+            if(err) res.send(err);
+            res.send(data.businesses);
+        });
+    });
+
+    app.get('/api/venues/:name', function(req, res) {
+        Venue.find({name: req.params.name}, function(err, venues) {
             if(err) res.send(err);
             res.json(venues);
         });
     });
 
-    app.post('/api/venues/', auth, function(req, res) {
-        Venues.findById(req.body["_id"], function(err, venue) {
+    app.post('/api/venues/up', auth, function(req, res) {
+        Venue.find({name:req.body["name"]}, function(err, venue) {
             if(err) res.send(err);
-            if(venue.length) {
-                venue.going = req.body.going;
-                option.save(function(err) {
+            if(venue) {
+                venue[0].going = req.body.going;
+                venue[0].save(function(err) {
                     if(err) res.send(err);
 
                     res.json({message: "Success!"});
                 });
-            } else {
-                var venue = new Venues();
-                venue.name = req.body.name;
-                venue.going = req.body.going;
-
-                venue.save(function(err) {
-                    if(err) res.send(err);
-                });
             }
+        });
+    });
+
+    app.post('/api/venues/create', auth, function(req, res) {
+        var venue = new Venue();
+        venue.name = req.body.name;
+        venue.going = req.body.going;
+
+        venue.save(function(err) {
+            if(err) res.send(err);
+            res.json({message: 'Success!'});
         });
     });
 
