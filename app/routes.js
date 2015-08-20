@@ -25,6 +25,13 @@ module.exports = function(app) {
         });
     });
 
+    app.get('/api/user/get/venues/:user', function(req, res) {
+        User.find({username: req.params.user}, function(err, user) {
+            if(err) res.send(err);
+            res.send(user[0].venues);
+        });
+    });
+
     app.post('/api/venues/up', auth, function(req, res) {
         Venue.find({name:req.body["name"]}, function(err, venue) {
             if(err) res.send(err);
@@ -41,6 +48,7 @@ module.exports = function(app) {
 
     app.post('/api/venues/create', auth, function(req, res) {
         var venue = new Venue();
+
         venue.name = req.body.name;
         venue.going = req.body.going;
 
@@ -49,6 +57,30 @@ module.exports = function(app) {
             res.json({message: 'Success!'});
         });
     });
+
+    app.post('/api/user/add/venue', auth, function(req, res) {
+        User.find({username: req.body.username},function(err, user) {
+            if(err) res.send(err);
+            if(user) {
+                user[0].venues.push(req.body.venue);
+                user[0].save(function(err) {
+                    if(err) res.send(err);
+                });
+            }
+        });
+    });
+
+    app.post('/api/user/rem/venue', auth, function(req, res) {
+        User.find({username: req.body.username},function(err, user) {
+            if(err) res.send(err);
+            if(user) {
+                user[0].venues.splice(user[0].venues.indexOf(req.body.venue), 1);
+                user[0].save(function(err) {
+                    if(err) res.send(err);
+                });
+            }
+        });
+    })
 
     app.post('/register', function(req, res, next) {
         var user = new User();
