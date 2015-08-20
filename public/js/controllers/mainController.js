@@ -17,6 +17,16 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
                         .error(function(err) {
                             console.log("Error: " + err);
                         });
+
+                    $http.get('/api/user/get/venues/' +auth.currentUser())
+                        .success(function(venueDB) {
+                            if(venueDB.indexOf(venue.name) !== -1) {
+                                venue.u = true;
+                            }
+                        })
+                        .error(function(err) {
+                            console.log("Error: " + err);
+                        });
                     return venue;
                 });
             })
@@ -39,6 +49,7 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
                             .success(function(venues) {
                                 if(venues.indexOf(venue.name) !== -1) {
                                     venue.going -= 1;
+                                    venue.u = false;
                                     $http.post('/api/venues/up', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
                                         .success(function(venueDB) {
                                             console.log(venueDB);
@@ -55,6 +66,7 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
                                         });
                                 } else {
                                     venue.going += 1;
+                                    venue.u = true;
                                     $http.post('/api/venues/up', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
                                         .success(function(venueDB) {
                                             console.log(venueDB);
@@ -76,6 +88,7 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
                             });
                     } else {
                         venue.going += 1;
+                        venue.u = true;
                         $http.post('/api/venues/create', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
                             .success(function() {
                                 console.log("Success!");

@@ -68,7 +68,7 @@ article {
     background-color: #fff;
 }
 
-a, a:visited, a:active, a:hover {
+h3 > a, a:visited, a:active, a:hover {
     text-decoration: none;
     color: #444;
 }
@@ -88,7 +88,7 @@ a, a:visited, a:active, a:hover {
     margin-left: 5%;
 }
 
-form > a, a:visited, a:active, a:hover, .white-link {
+form > a, form > a:visited, form > a:active, form > a:hover, .white-link {
     color: #efefef;
     text-decoration: underline;
 }
@@ -136,7 +136,7 @@ form > a, a:visited, a:active, a:hover, .white-link {
         }
 
         .search, .btn-search {
-            height: 30px;
+            height: 40px;
             font-size: 1em;
         }
 

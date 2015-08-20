@@ -8,6 +8,6 @@
     <article ng-repeat="venue in venues">
         <h3><a href="{{ venue.url }}">{{ venue.name }}</a></h3>
         <p>{{ venue["snippet_text"] }}</p>
-        <button ng-click="addGoing(venue)" class="btn btn-info">{{ venue.going }} going</button>
+        <button ng-click="addGoing(venue)" class="btn btn-info">{{ venue.going }} going</button><div ng-show='venue.u'>I'm too!</div>
     </article>
 </div>
