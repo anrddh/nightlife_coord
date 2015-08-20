@@ -17,16 +17,17 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
                         .error(function(err) {
                             console.log("Error: " + err);
                         });
-
-                    $http.get('/api/user/get/venues/' +auth.currentUser())
-                        .success(function(venueDB) {
-                            if(venueDB.indexOf(venue.name) !== -1) {
-                                venue.u = true;
-                            }
-                        })
-                        .error(function(err) {
-                            console.log("Error: " + err);
-                        });
+                    if(auth.currentUser()) {
+                        $http.get('/api/user/get/venues/' +auth.currentUser())
+                            .success(function(venueDB) {
+                                if(venueDB.indexOf(venue.name) !== -1) {
+                                    venue.u = true;
+                                }
+                            })
+                            .error(function(err) {
+                                console.log("Error: " + err);
+                            });
+                    }
                     return venue;
                 });
             })
