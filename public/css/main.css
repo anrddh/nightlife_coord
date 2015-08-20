@@ -88,7 +88,7 @@ h3 > a, a:visited, a:active, a:hover {
     margin-left: 5%;
 }
 
-form > a, form > a:visited, form > a:active, form > a:hover, .white-link {
+form > a, form > a:visited, form > a:active, form > a:hover, a.white-link, a.white-link:hover, a.white-link:active, a.white-link:visited {
     color: #efefef;
     text-decoration: underline;
 }

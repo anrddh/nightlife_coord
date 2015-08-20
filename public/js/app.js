@@ -45,6 +45,7 @@ Nightlife.factory('auth', ['$http', '$window', '$location', function($http, $win
 
     auth.logOut = function() {
         $window.localStorage.removeItem('t');
+        document.location.reload(true);
         $location.path('/');
     };
 
