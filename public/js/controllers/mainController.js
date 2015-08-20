@@ -1,4 +1,7 @@
 Nightlife.controller("mainController", function($scope, $http, auth, $location, $window) {
+
+    $scope.logOut     = auth.logOut;
+    $scope.isLoggedIn = auth.isLoggedIn();
     $scope.getBusiness = function() {
         $http.get('/api/yelp/'+$scope.city)
             .success(function(data) {
