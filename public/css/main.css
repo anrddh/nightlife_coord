@@ -63,8 +63,7 @@ article {
     top: 75%;
     left: 0;
     right: 0;
-    width: 70%;
-    margin: auto;
+    width: 100%;
     padding: 5%;
     background-color: #fff;
 }
@@ -97,3 +96,55 @@ form > a, a:visited, a:active, a:hover, .white-link {
 .center {
     text-align: center;
 }
+
+@media only screen
+  and (min-device-width: 375px) {
+
+    .btn {
+        font-size: 1.8em;
+    }
+
+    h1 {
+        font-size: 3em;
+    }
+
+    .search, .btn-search {
+        height: 45px;
+        font-size: 1.8em;
+    }
+
+    h3, p {
+        font-size: 2em;
+    }
+
+    .auth {
+        width: 50%;
+        margin-left: 25%;
+        margin-top: 100px;
+    }
+}
+
+@media only screen
+  and (min-device-width: 1280px) {
+        h1 {
+            font-size: 4em;
+        }
+
+        .white {
+            width: 80%;
+            margin: auto;
+        }
+
+        .search, .btn-search {
+            height: 30px;
+            font-size: 1em;
+        }
+
+        h3, p {
+            font-size: 1.5em;
+        }
+
+        .btn {
+            font-size: 1em;
+        }
+  }

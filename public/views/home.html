@@ -1,7 +1,7 @@
 <div class="center"><a ng-click="logOut()" class="white-link" ng-show="isLoggedIn" href>Log out</a></div>
 <h1>So, where are you hanging out tonight?</h1>
 <form ng-submit="getBusiness()">
-    <input type="text" class="search" ng-model="city" placeholder="Where you at?" required>
+    <input type="text" class="form-control search" ng-model="city" placeholder="Where you at?" required>
     <button type="submit" class="btn btn-primary btn-search">Submit</button>
 </form>
 <div class="white" ng-show="venues">
