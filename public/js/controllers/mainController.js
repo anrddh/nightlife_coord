@@ -2,37 +2,55 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
 
     $scope.logOut     = auth.logOut;
     $scope.isLoggedIn = auth.isLoggedIn();
+
     $scope.getBusiness = function() {
         $http.get('/api/yelp/'+$scope.city)
             .success(function(data) {
-                $scope.venues = data.map(function(venue) {
-                    $http.get("/api/venues/"+venue.name)
-                        .success(function(venueDB) {
-                            if(venueDB.length) {
-                                venue.going = venueDB[0].going;
-                            } else {
-                                venue.going = 0;
-                            };
-                        })
-                        .error(function(err) {
-                            console.log("Error: " + err);
+                $scope.venues = data;
+                var venuesDb = [];
+
+                $http.get("/api/venues")
+                    .success(function(venues) {
+                        venuesDb = venues;
+
+                        var venuesDbName = venuesDb.map(function(venue) {
+                            return venue.name;
                         });
-                    if(auth.currentUser()) {
-                        $http.get('/api/user/get/venues/' +auth.currentUser())
-                            .success(function(venueDB) {
-                                if(venueDB.indexOf(venue.name) !== -1) {
-                                    venue.u = true;
-                                }
-                            })
-                            .error(function(err) {
-                                console.log("Error: " + err);
-                            });
-                    }
-                    return venue;
-                });
+
+                        var venuesDbGoing = venuesDb.map(function(venue) {
+                            return venue.going;
+                        });
+
+                        for(i=0; i<$scope.venues.length; i++) {
+                            if(venuesDbName.indexOf($scope.venues[i].name) !== -1) {
+                                $scope.venues[i].going = venuesDbGoing[venuesDbName.indexOf($scope.venues[i].name)];
+                            } else {
+                                $scope.venues[i].going = 0;
+                            }
+                        }
+
+                        if(auth.isLoggedIn()) {
+                            $http.get('/api/user/get/venues/'+auth.currentUser())
+                                .success(function(userVenues) {
+                                    for(i=0; i<$scope.venues.length; i++) {
+                                        if(userVenues.indexOf($scope.venues[i].name) !== -1) {
+                                            $scope.venues[i].u = true;
+                                        } else {
+                                            $scope.venues[i].u = false;
+                                        }
+                                    }
+                                })
+                                .error(function(err) {
+                                    console.log("Error: " + err);
+                                });
+                        }
+                    })
+                    .error(function(err) {
+                        console.log("Error: " + err);
+                    });
             })
             .error(function(err) {
-                console.log(err);
+                console.log("Error: " + err);
             });
     };
 
@@ -43,41 +61,51 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
                 venue: venue.name
             }
 
-            $http.get('/api/venues/' + venue.name)
-                .success(function(data) {
-                    if(data.length) {
-                        $http.get('/api/user/get/venues/'+auth.currentUser())
-                            .success(function(venues) {
-                                if(venues.indexOf(venue.name) !== -1) {
-                                    venue.going -= 1;
-                                    venue.u = false;
+            if(venue.u == true) {
+                venue.going -= 1;
+                venue.u = false;
+            } else if(venue.u == false) {
+                venue.going += 1;
+                venue.u = true;
+            }
+
+            $http.get('/api/venues')
+                .success(function(venuesDb) {
+                    var venuesDbName = venuesDb.map(function(venue) {
+                        return venue.name;
+                    });
+
+                    if(venuesDbName.indexOf(venue.name) === -1) {
+                        $http.post('/api/venues/create', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
+                            .success(function(venueDB) {
+                                if(venue.u == true) {
                                     $http.post('/api/venues/up', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
                                         .success(function(venueDB) {
-                                            console.log(venueDB);
+                                            console.log("Successfully downvoted!");
                                         })
                                         .error(function(err) {
                                             console.log("Error: " + err)
                                         });
+
                                     $http.post('/api/user/rem/venue', user, {headers:{Authorization: 'Bearer '+auth.getToken()}})
                                         .success(function() {
-                                            console.log("Success!");
+                                            console.log("Successfully removed venue!");
                                         })
                                         .error(function(err) {
                                             console.log("Error: " + err);
                                         });
                                 } else {
-                                    venue.going += 1;
-                                    venue.u = true;
                                     $http.post('/api/venues/up', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
                                         .success(function(venueDB) {
-                                            console.log(venueDB);
+                                            console.log("Successfully upvoted!");
                                         })
                                         .error(function(err) {
                                             console.log("Error: " + err)
                                         });
+
                                     $http.post('/api/user/add/venue', user, {headers:{Authorization: 'Bearer '+auth.getToken()}})
                                         .success(function() {
-                                            console.log("Success!");
+                                            console.log("Successfully added venue!");
                                         })
                                         .error(function(err) {
                                             console.log("Error: " + err);
@@ -85,31 +113,47 @@ Nightlife.controller("mainController", function($scope, $http, auth, $location, 
                                 }
                             })
                             .error(function(err) {
-                                console.log("Error: " + err);
+                                console.log("Error: " + err)
                             });
                     } else {
-                        venue.going += 1;
-                        venue.u = true;
-                        $http.post('/api/venues/create', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
-                            .success(function() {
-                                console.log("Success!");
-                            })
-                            .error(function(err) {
-                                console.log("Error: " + err);
-                            });
-                        $http.post('/api/user/add/venue', user, {headers:{Authorization: 'Bearer '+auth.getToken()}})
-                            .success(function() {
-                                console.log("Success!");
-                            })
-                            .error(function(err) {
-                                console.log("Error: " + err);
-                            });
+                        if(venue.u == true) {
+                            $http.post('/api/venues/up', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
+                                .success(function(venueDB) {
+                                    console.log("Successfully downvoted!");
+                                })
+                                .error(function(err) {
+                                    console.log("Error: " + err)
+                                });
+
+                            $http.post('/api/user/rem/venue', user, {headers:{Authorization: 'Bearer '+auth.getToken()}})
+                                .success(function() {
+                                    console.log("Successfully removed venue!");
+                                })
+                                .error(function(err) {
+                                    console.log("Error: " + err);
+                                });
+                        } else {
+                            $http.post('/api/venues/up', venue, {headers:{Authorization: 'Bearer '+auth.getToken()}})
+                                .success(function(venueDB) {
+                                    console.log("Successfully upvoted!");
+                                })
+                                .error(function(err) {
+                                    console.log("Error: " + err)
+                                });
+
+                            $http.post('/api/user/add/venue', user, {headers:{Authorization: 'Bearer '+auth.getToken()}})
+                                .success(function() {
+                                    console.log("Successfully added venue!");
+                                })
+                                .error(function(err) {
+                                    console.log("Error: " + err);
+                                });
+                        }
                     }
                 })
                 .error(function(err) {
                     console.log("Error: " + err);
                 });
-
         } else {
             $location.path('/login');
         }

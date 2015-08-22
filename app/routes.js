@@ -18,8 +18,8 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/api/venues/:name', function(req, res) {
-        Venue.find({name: req.params.name}, function(err, venues) {
+    app.get('/api/venues', function(req, res) {
+        Venue.find(function(err, venues) {
             if(err) res.send(err);
             res.json(venues);
         });
@@ -31,7 +31,7 @@ module.exports = function(app) {
             res.send(user[0].venues);
         });
     });
-
+    /*create new venue if one doesn't already exist: need to implement*/
     app.post('/api/venues/up', auth, function(req, res) {
         Venue.find({name:req.body["name"]}, function(err, venue) {
             if(err) res.send(err);
@@ -67,6 +67,7 @@ module.exports = function(app) {
                     if(err) res.send(err);
                 });
             }
+            res.json({message: "Success!"});
         });
     });
 
@@ -80,6 +81,7 @@ module.exports = function(app) {
                 });
             }
         });
+        res.json({message: "Success!"});
     })
 
     app.post('/register', function(req, res, next) {
